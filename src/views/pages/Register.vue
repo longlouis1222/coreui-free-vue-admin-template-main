@@ -12,11 +12,26 @@
                   <CInputGroupText>
                     <CIcon icon="cil-user" />
                   </CInputGroupText>
-                  <CFormInput placeholder="Username" autocomplete="username" />
+                  <CFormInput
+                    placeholder="Firstname"
+                    autocomplete="firstname"
+                  />
+                </CInputGroup>
+                <CInputGroup class="mb-3">
+                  <CInputGroupText>
+                    <CIcon icon="cil-user" />
+                  </CInputGroupText>
+                  <CFormInput placeholder="Lastname" autocomplete="lastname" />
                 </CInputGroup>
                 <CInputGroup class="mb-3">
                   <CInputGroupText>@</CInputGroupText>
                   <CFormInput placeholder="Email" autocomplete="email" />
+                </CInputGroup>
+                <CInputGroup class="mb-3">
+                  <CInputGroupText>
+                    <CIcon icon="cil-user" />
+                  </CInputGroupText>
+                  <CFormInput placeholder="Username" autocomplete="username" />
                 </CInputGroup>
                 <CInputGroup class="mb-3">
                   <CInputGroupText>

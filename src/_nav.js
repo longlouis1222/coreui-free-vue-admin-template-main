@@ -267,6 +267,11 @@ export default [
       },
       {
         component: 'CNavItem',
+        name: 'ForgotPassword',
+        to: '/pages/forgot-password',
+      },
+      {
+        component: 'CNavItem',
         name: 'Error 404',
         to: '/pages/404',
       },

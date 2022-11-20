@@ -14,6 +14,7 @@
                       <CIcon icon="cil-user" />
                     </CInputGroupText>
                     <CFormInput
+                      v-model="username"
                       placeholder="Username"
                       autocomplete="username"
                     />
@@ -23,6 +24,7 @@
                       <CIcon icon="cil-lock-locked" />
                     </CInputGroupText>
                     <CFormInput
+                      v-model="password"
                       type="password"
                       placeholder="Password"
                       autocomplete="current-password"
@@ -31,10 +33,14 @@
                   <CRow>
                     <CCol :xs="6">
                       <!-- <CButton color="primary" class="px-4"> Login </CButton> -->
-                      <el-button type="primary">Primary</el-button>
+                      <el-button type="primary" @click="login">Login</el-button>
                     </CCol>
                     <CCol :xs="6" class="text-right">
-                      <CButton color="link" class="px-0">
+                      <CButton
+                        color="link"
+                        class="px-0"
+                        @click="goToForgotPassword"
+                      >
                         Forgot password?
                       </CButton>
                     </CCol>
@@ -51,7 +57,12 @@
                     sed do eiusmod tempor incididunt ut labore et dolore magna
                     aliqua.
                   </p>
-                  <CButton color="light" variant="outline" class="mt-3">
+                  <CButton
+                    color="light"
+                    variant="outline"
+                    class="mt-3"
+                    @click="goToSignUp"
+                  >
                     Register Now!
                   </CButton>
                 </div>
@@ -64,8 +75,45 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Login',
+<script setup>
+// import axios from 'axios'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { ref } from 'vue'
+const router = useRouter()
+const store = useStore()
+
+const username = ref('')
+const password = ref('')
+
+const login = () => {
+  // axios
+  //   .post('http://localhost:8085/api/v1/login', {
+  //     username: 'longnh',
+  //     password: '12345678',
+  //   })
+  //   .then(function (response) {
+  //     console.log(response)
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error)
+  //   })
+  console.log('Username / password', username.value, password.value)
+  console.log('Login func from Login Component')
+  store.dispatch('login', { username: username.value, password: password.value })
+
+  // store.commit('setUser', 'Long Louis')
+}
+
+const goToSignUp = () => {
+  router.push({
+    name: 'Register',
+  })
+}
+
+const goToForgotPassword = () => {
+  router.push({
+    name: 'ForgotPassword',
+  })
 }
 </script>
