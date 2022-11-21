@@ -1,6 +1,5 @@
 import { createStore } from 'vuex'
-import AuthStore from './modules/auth'
-// import modules from './modules'
+import AuthService from '../moduleApi/modules/auth'
 
 export default createStore({
   state: {
@@ -28,9 +27,16 @@ export default createStore({
     },
   },
   actions: {
-    login({ commit }, credentials) {
-      console.log('Log in from Action store ...', credentials.username, credentials.password)
-      commit('SET_CURRENT_USER')
+    async login({ commit }, credentials) {
+      try {
+        console.log('Log in from Action store ...', credentials.username, credentials.password)
+        const res = await AuthService.login(credentials);
+        console.log('RES', res);
+        commit('SET_CURRENT_USER')
+        localStorage.setItem('Token', res.data.refreshToken)
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
   modules: {},

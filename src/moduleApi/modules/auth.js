@@ -1,8 +1,11 @@
 import Api from '../../moduleApi';
 
 export default {
-  login() {
-    return Api().post('users/signin')
+  login(credentials) {
+    return Api().post('login', {
+      username: credentials.username,
+      password: credentials.password
+    })
   },
   register() {
     return Api().post('users/signup')

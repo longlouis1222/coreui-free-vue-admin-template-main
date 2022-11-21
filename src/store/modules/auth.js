@@ -1,4 +1,4 @@
-// import AuthServices from '../modules/auth'
+import AuthServices from '../../moduleApi/modules/auth'
 
 export const state = {
   user: null,
