@@ -40,20 +40,21 @@
       <CDropdownItem>
         <CIcon icon="cil-shield-alt" /> Lock Account
       </CDropdownItem>
-      <CDropdownItem> <CIcon icon="cil-lock-locked" /> Logout </CDropdownItem>
+      <CDropdownItem @click="logout">
+        <CIcon icon="cil-lock-locked" /> Logout
+      </CDropdownItem>
     </CDropdownMenu>
   </CDropdown>
 </template>
 
-<script>
+<script setup>
 import avatar from '@/assets/images/avatars/8.jpg'
-export default {
-  name: 'AppHeaderDropdownAccnt',
-  setup() {
-    return {
-      avatar: avatar,
-      itemsCount: 42,
-    }
-  },
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+const logout = () => {
+  console.log('Log out from App Header')
+  store.dispatch('logout')
 }
 </script>

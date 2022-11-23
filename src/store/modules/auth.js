@@ -5,10 +5,6 @@ export const state = {
 }
 
 export const mutations = {
-  setUser(state, payload) {
-    state.user = payload
-    console.log('User state change: ', state.user)
-  },
 }
 
 export const getters = {

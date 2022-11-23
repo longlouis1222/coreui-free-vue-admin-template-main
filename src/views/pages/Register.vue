@@ -13,6 +13,7 @@
                     <CIcon icon="cil-user" />
                   </CInputGroupText>
                   <CFormInput
+                    v-model="firstname"
                     placeholder="Firstname"
                     autocomplete="firstname"
                   />
@@ -21,23 +22,24 @@
                   <CInputGroupText>
                     <CIcon icon="cil-user" />
                   </CInputGroupText>
-                  <CFormInput placeholder="Lastname" autocomplete="lastname" />
+                  <CFormInput v-model="lastname" placeholder="Lastname" autocomplete="lastname" />
                 </CInputGroup>
                 <CInputGroup class="mb-3">
                   <CInputGroupText>@</CInputGroupText>
-                  <CFormInput placeholder="Email" autocomplete="email" />
+                  <CFormInput v-model="email" placeholder="Email" autocomplete="email" />
                 </CInputGroup>
                 <CInputGroup class="mb-3">
                   <CInputGroupText>
                     <CIcon icon="cil-user" />
                   </CInputGroupText>
-                  <CFormInput placeholder="Username" autocomplete="username" />
+                  <CFormInput v-model="username" placeholder="Username" autocomplete="username" />
                 </CInputGroup>
                 <CInputGroup class="mb-3">
                   <CInputGroupText>
                     <CIcon icon="cil-lock-locked" />
                   </CInputGroupText>
                   <CFormInput
+                    v-model="password"
                     type="password"
                     placeholder="Password"
                     autocomplete="new-password"
@@ -48,13 +50,14 @@
                     <CIcon icon="cil-lock-locked" />
                   </CInputGroupText>
                   <CFormInput
+                    v-model="repeatPassword"
                     type="password"
                     placeholder="Repeat password"
                     autocomplete="new-password"
                   />
                 </CInputGroup>
                 <div class="d-grid">
-                  <CButton color="success">Create Account</CButton>
+                  <CButton @click="signUp" color="success">Create Account</CButton>
                 </div>
               </CForm>
             </CCardBody>
@@ -65,8 +68,32 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Register',
+<script setup>
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { ref } from 'vue'
+const router = useRouter()
+const store = useStore()
+
+const firstname = ref(null)
+const lastname = ref(null)
+const email = ref(null)
+const username = ref(null)
+const password = ref(null)
+const repeatPassword = ref(null)
+
+const signUp = () => {
+  const data = {
+    firstName: firstname.value,
+    lastName: lastname.value,
+    email: email.value,
+    username: username.value,
+    password: password.value,
+    confirmPassword: repeatPassword.value,
+  };
+  console.log('>>>data', data)
+  console.log('Login func from Register Component')
+  store.dispatch('register', data)
 }
+
 </script>

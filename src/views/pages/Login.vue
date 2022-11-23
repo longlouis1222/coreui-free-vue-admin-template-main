@@ -87,17 +87,6 @@ const username = ref('')
 const password = ref('')
 
 const login = () => {
-  // axios
-  //   .post('http://localhost:8085/api/v1/login', {
-  //     username: 'longnh',
-  //     password: '12345678',
-  //   })
-  //   .then(function (response) {
-  //     console.log(response)
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error)
-  //   })
   console.log('Username / password', username.value, password.value)
   console.log('Login func from Login Component')
   store.dispatch('login', { username: username.value, password: password.value })
