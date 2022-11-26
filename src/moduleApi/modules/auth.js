@@ -7,6 +7,7 @@ export default {
       password: credentials.password,
     })
   },
+
   register(credentials) {
     return Api().post('sign-up', {
       firstName: credentials.firstName,
@@ -15,6 +16,21 @@ export default {
       username: credentials.username,
       password: credentials.password,
       confirmPassword: credentials.confirmPassword,
+    })
+  },
+
+  forgotPassword(credentials) {
+    return Api().post('forgot-password', {
+      email: credentials.email,
+    })
+  },
+
+  updatePassword(credentials) {
+    return Api().post('update-password', {
+      email: credentials.email,
+      oldPassword: credentials.oldPassword,
+      newPassword: credentials.newPassword,
+      token: credentials.token,
     })
   },
 }

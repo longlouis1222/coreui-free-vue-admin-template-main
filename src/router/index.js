@@ -287,15 +287,21 @@ const routes = [
         component: () => import('@/views/pages/Login'),
       },
       {
+        path: 'register',
+        name: 'Register',
+        component: () => import('@/views/pages/Register'),
+      },
+      {
         path: 'forgot-password',
         name: 'ForgotPassword',
         component: () => import('@/views/pages/ForgotPassword'),
       },
       {
-        path: 'register',
-        name: 'Register',
-        component: () => import('@/views/pages/Register'),
+        path: 'update-password',
+        name: 'UpdatePassword',
+        component: () => import('@/views/pages/UpdatePassword'),
       },
+
     ],
   },
 ]

@@ -12,6 +12,7 @@ import DocsExample from '@/components/DocsExample'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import BootstrapVue3 from 'bootstrap-vue-3';
+
 // import viLocale from 'element-plus/dist/locale/vi.mjs'
 
 // window.MyConfig.language == 'vi'

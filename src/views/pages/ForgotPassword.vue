@@ -1,115 +1,57 @@
 <script setup>
+import ValidService from '../../service/ValidService'
+import { ElNotification } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import { FormInstance } from 'element-plus'
-import Validate from '../../service/ValidService'
+
 const ruleFormRef = ref(FormInstance)
 const router = useRouter()
-let loadingBtn = ref(false)
-const showLayLaiMatKhau = ref(false)
-const is_readonly = ref(true)
-const isStep1 = ref(true)
-const isStep2 = ref(false)
+const store = useStore()
+
+const loadingBtn = ref(false)
+const isRecoverPw = ref(true)
 // dữ liệu form
-let dataForm = reactive({
+const dataForm = reactive({
   value: {
-    account: '',
-    code: '',
-    passwordNew: '',
-    passwordCheck: '',
+    email: null,
   },
 })
 // validate form
-const validatePass = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('Vui lòng nhập mật khẩu mới'))
-  } else if (value.length < 6) {
-    callback(new Error('Mật khẩu dài ít nhất 6 ký tự'))
-  } else if (value.includes(dataForm.value.account)) {
-    callback(new Error('Mật khẩu không được chứa tài khoản'))
-  } else {
-    callback()
-  }
-}
-const validatePassCheck = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('Vui lòng nhập lại mật khẩu'))
-  } else if (value !== dataForm.value.passwordNew) {
-    callback(new Error('Nhập lại mật khẩu chưa trùng khớp với mật khẩu mới'))
-  } else {
-    callback()
-  }
-}
 const rulesForm = reactive({
-  account: [
-    { trigger: 'blur', required: true, message: 'Vui lòng nhập tài khoản' },
-  ],
-  code: [
-    { trigger: 'blur', required: true, message: 'Vui lòng nhập mã xác thực' },
-    Validate.checkNumber,
-  ],
-  passwordNew: [{ required: true, validator: validatePass, trigger: 'blur' }],
-  passwordCheck: [
-    { required: true, validator: validatePassCheck, trigger: 'blur' },
-  ],
+  email: [ValidService.required, ValidService.checkEmail],
 })
 
-// function
-const fn_layMaXacThuc = async () => {
+const getVerificationCodes = async (formEl) => {
   loadingBtn.value = true
-  if (!dataForm.value.account) {
-    loadingBtn.value = false
-    return false
-  }
-
-  try {
-    // toastr.success("Mã code lấy lại mật khẩu đã được gửi vào tài khoản email");
-    showLayLaiMatKhau.value = true
-    isStep1.value = false
-    isStep2.value = true
-  } catch (e) {
-    console.log(e.code)
-    if (e.code === 4) {
-      // toastr.error("Gặp sự cố kết nối mạng Internet");
-    } else console.log('Lấy mã xác thực thất bại. Vui lòng thử lại!')
-  } finally {
-    setTimeout(() => {
-      loadingBtn.value = false
-    }, 2000)
-  }
-}
-
-const fn_layLaiMatKhau = async (formEl) => {
-  loadingBtn.value = true
-  is_readonly.value = false
 
   formEl.validate(async (valid) => {
     if (valid) {
       try {
-        await mushroom.$auth.resetPasswordAsync(
-          dataForm.value.account,
-          dataForm.value.code,
-          dataForm.value.passwordNew,
-        )
-        // toastr.success("Đã đặt lại mật khẩu dựa trên mã khôi phục mật khẩu");
+        console.log('Login func from Login Component', dataForm.value.email)
+        store.dispatch('forgotPassword', { email: dataForm.value.email})
         setTimeout(() => {
-          router.push({ name: 'login' })
-        }, 2000)
+          isRecoverPw.value = false
+        }, 1000)
       } catch (e) {
-        if (e.code === 4) {
-          // toastr.error("Gặp sự cố kết nối mạng Internet");
-        } else console.log('Lấy lại mật khẩu thất bại. Vui lòng thử lại!')
+        ElNotification({
+          title: 'Error',
+          message: `${e}`,
+          type: 'error',
+          duration: 3000,
+        })
       } finally {
         setTimeout(() => {
           loadingBtn.value = false
-        }, 2000)
+        }, 1500)
       }
     } else loadingBtn.value = false
   })
 }
 
-const trimAccount = () => {
-  dataForm.value.account = dataForm.value.account.trim()
+const backToPrev = () => {
+  isRecoverPw.value = true;
 }
 </script>
 
@@ -139,9 +81,7 @@ const trimAccount = () => {
         <div class="row">
           <div class="col-lg-12">
             <div class="text-center mt-sm-5 mb-4 text-white-50">
-              <div style="font-size: 40px; font-weight: 600">
-                Forgot password
-              </div>
+              <div style="font-size: 40px; font-weight: 600">Quên mật khẩu</div>
             </div>
           </div>
         </div>
@@ -150,15 +90,13 @@ const trimAccount = () => {
           <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-5">
               <div class="card mt-4">
-                <div class="card-body p-4">
-                  <div class="mt-2">
-                    <h5 class="text-primary text-center">KHÔI PHỤC MẬT KHẨU</h5>
-                    <p style="color: #747474" :class="{ active: isStep1 }">
-                      1. Lấy mã xác thực: Mã xác thực sẽ được gửi vào tài khoản
-                      email đã đăng ký
-                    </p>
-                    <p style="color: #747474" :class="{ active: isStep2 }">
-                      2. Khôi phục mật khẩu với mã xác thực
+                <div v-if="isRecoverPw" class="card-body p-4">
+                  <div class="mt-2 text-center">
+                    <h5 class="mb-4">QUÊN MẬT KHẨU</h5>
+                    <p :class="{ active: true }">
+                      Mã xác thực sẽ được gửi vào tài khoản email đã đăng ký
+                      <br />
+                      Vui lòng nhập Email bạn đã đăng ký tài khoản.
                     </p>
                   </div>
 
@@ -172,101 +110,78 @@ const trimAccount = () => {
                       label-position="top"
                       @submit.prevent
                     >
-                      <el-form-item label="Tài khoản" prop="account">
+                      <el-form-item label="Email" prop="email">
                         <el-input
                           type="text"
-                          v-model="dataForm.value.account"
+                          v-model="dataForm.value.email"
                           tabindex="0"
-                          :autofocus="showLayLaiMatKhau === false"
-                          :disabled="showLayLaiMatKhau === true"
-                          @change="trimAccount"
+                          :autofocus="isRecoverPw"
+                          :disabled="!isRecoverPw"
                         />
                       </el-form-item>
-                      <el-form-item
-                        label="Mã xác thực"
-                        prop="code"
-                        v-if="showLayLaiMatKhau === true"
-                      >
-                        <el-input
-                          type="text"
-                          autocomplete="off"
-                          v-model="dataForm.value.code"
-                          tabindex="1"
-                          :autofocus="showLayLaiMatKhau === true"
-                        />
-                      </el-form-item>
-                      <el-form-item
-                        label="Mật khẩu mới"
-                        prop="passwordNew"
-                        v-if="showLayLaiMatKhau === true"
-                      >
-                        <el-input
-                          type="password"
-                          autocomplete="new-password"
-                          v-model="dataForm.value.passwordNew"
-                          tabindex="2"
-                          show-password
-                        />
-                      </el-form-item>
-                      <el-form-item
-                        label="Nhập lại mật khẩu"
-                        prop="passwordCheck"
-                        v-if="showLayLaiMatKhau === true"
-                      >
-                        <el-input
-                          type="password"
-                          autocomplete="off"
-                          v-model="dataForm.value.passwordCheck"
-                          tabindex="3"
-                          show-password
-                        />
-                      </el-form-item>
-
-                      <el-form-item class="mb-0">
-                        <el-button
-                          v-if="showLayLaiMatKhau === true"
-                          type="button"
-                          style="height: 36px"
-                          class="btn btn-success btn-load w-100 mt-2"
-                          @click="fn_layLaiMatKhau(ruleFormRef)"
-                          tabindex="4"
-                          native-type="submit"
-                          :loading="loadingBtn"
-                        >
-                          Đồng ý
-                        </el-button>
-                        <el-button
-                          v-else
-                          type="button"
-                          class="btn btn-success btn-load w-100 mt-2"
-                          @click="fn_layMaXacThuc(ruleFormRef)"
-                          tabindex="5"
-                          native-type="submit"
-                        >
-                         Đồng ý
-                        </el-button>
-                        <div
-                          class="text-center w-100"
-                          style="font-size: 11px"
-                          v-if="showLayLaiMatKhau === true"
-                        >
-                          Chưa nhận được mã xác thực?
-                          <a
-                            @click="fn_layMaXacThuc()"
-                            style="color: #409eff; cursor: pointer"
-                            >Lấy lại mã xác thực</a
-                          >
-                          hoặc
-                          <a
-                            style="color: #409eff; cursor: pointer"
+                      <div class="d-flex justify-content-between">
+                        <el-form-item class="mb-0 w-48">
+                          <el-button
+                            type="button"
+                            style="height: 36px"
+                            class="btn btn-success w-100 mt-2"
                             @click="router.go(-1)"
-                            >Quay lại</a
+                            tabindex="2"
+                            native-type="submit"
                           >
-                        </div>
-                      </el-form-item>
+                            Quay lại
+                          </el-button>
+                        </el-form-item>
+                        <el-form-item class="mb-0 w-48">
+                          <el-button
+                            type="primary"
+                            style="height: 36px"
+                            class="btn btn-success btn-load w-100 mt-2"
+                            @click="getVerificationCodes(ruleFormRef)"
+                            tabindex="1"
+                            native-type="submit"
+                            :loading="loadingBtn"
+                          >
+                            Gửi
+                          </el-button>
+                        </el-form-item>
+                      </div>
                     </el-form>
                   </div>
                 </div>
+                <!-- StartNotification check mail -->
+                <div v-else class="card-body p-3">
+                  <div class="mt-2 text-center">
+                    <h5 class="text-center">
+                      Gửi thông tin lấy lại mật khẩu thành công !
+                    </h5>
+                    <img
+                      class="w-75"
+                      src="../../../src/assets/gifs/mail-download.gif"
+                      alt="mail..."
+                    />
+                    <p class="active text-center">
+                      Mã xác thực vào tài khoản email mà bạn đã đăng ký.
+                      <br />
+                      Hãy kiểm tra email và làm theo hướng dẫn.
+                    </p>
+                    <div class="text-center w-100" style="font-size: 11px">
+                      Chưa nhận được mã xác thực?
+                      <a
+                        @click="backToPrev"
+                        style="color: #409eff; cursor: pointer"
+                        >Lấy lại mã xác thực</a
+                      >
+                      hoặc
+                      <a
+                        style="color: #409eff; cursor: pointer"
+                        @click="router.go(-1)"
+                        >Quay lại màn đăng nhập</a
+                      >
+                    </div>
+                  </div>
+                </div>
+                <!-- Notification check mail -->
               </div>
             </div>
           </div>
@@ -283,8 +198,8 @@ const trimAccount = () => {
 
 <style scoped>
 .active {
-  color: #019d88 !important;
-  font-weight: 600;
+  color: #7c7c7c;
+  font-weight: 500;
 }
 .auth-one-bg {
   background-image: url('@/assets/images/vue400.jpg');
@@ -300,10 +215,6 @@ const trimAccount = () => {
   height: 380px;
 }
 .auth-one-bg .bg-overlay {
-  background: linear-gradient(90deg, #0b0b15, #151529);
-  opacity: 0.9;
-}
-.bg-overlay {
   position: absolute;
   height: 100%;
   width: 100%;
@@ -311,8 +222,9 @@ const trimAccount = () => {
   bottom: 0;
   left: 0;
   top: 0;
-  opacity: 0.7;
+  background: linear-gradient(90deg, #0b0b15, #151529);
   background-color: #000;
+  opacity: 0.7;
 }
 .auth-one-bg .shape {
   position: absolute;

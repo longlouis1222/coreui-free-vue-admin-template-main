@@ -50,7 +50,7 @@ export default createStore({
       }
     },
 
-    async logout({commit}) {
+    async logout({ commit }) {
       try {
         console.log('Log out from Action store ...')
         localStorage.removeItem('Token')
@@ -67,6 +67,31 @@ export default createStore({
         const res = await AuthService.register(credentials)
         if (res.status) {
           console.log('register RES', res)
+          router.push({ name: 'Login' })
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async forgotPassword({ commit }, credentials) {
+      try {
+        console.log('Forgot PW from Action store...')
+        const res = await AuthService.forgotPassword(credentials)
+        if (res.status) {
+          console.log('forgotPassword RES', res)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async updatePassword({ commit }, credentials) {
+      try {
+        console.log('Update PW from Action store...')
+        const res = await AuthService.updatePassword(credentials)
+        if (res.status) {
+          console.log('updatePassword RES', res)
           router.push({ name: 'Login' })
         }
       } catch (error) {

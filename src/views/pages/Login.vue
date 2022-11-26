@@ -1,3 +1,35 @@
+<script setup>
+// import axios from 'axios'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { ref } from 'vue'
+const router = useRouter()
+const store = useStore()
+
+const username = ref('')
+const password = ref('')
+
+const login = () => {
+  console.log('Username / password', username.value, password.value)
+  console.log('Login func from Login Component')
+  store.dispatch('login', { username: username.value, password: password.value })
+
+  // store.commit('setUser', 'Long Louis')
+}
+
+const goToSignUp = () => {
+  router.push({
+    name: 'Register',
+  })
+}
+
+const goToForgotPassword = () => {
+  router.push({
+    name: 'ForgotPassword',
+  })
+}
+</script>
+
 <template>
   <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
     <CContainer>
@@ -74,35 +106,3 @@
     </CContainer>
   </div>
 </template>
-
-<script setup>
-// import axios from 'axios'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { ref } from 'vue'
-const router = useRouter()
-const store = useStore()
-
-const username = ref('')
-const password = ref('')
-
-const login = () => {
-  console.log('Username / password', username.value, password.value)
-  console.log('Login func from Login Component')
-  store.dispatch('login', { username: username.value, password: password.value })
-
-  // store.commit('setUser', 'Long Louis')
-}
-
-const goToSignUp = () => {
-  router.push({
-    name: 'Register',
-  })
-}
-
-const goToForgotPassword = () => {
-  router.push({
-    name: 'ForgotPassword',
-  })
-}
-</script>

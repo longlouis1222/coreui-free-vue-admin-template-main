@@ -1,3 +1,33 @@
+<script setup>
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { ref } from 'vue'
+const router = useRouter()
+const store = useStore()
+
+const firstname = ref(null)
+const lastname = ref(null)
+const email = ref(null)
+const username = ref(null)
+const password = ref(null)
+const repeatPassword = ref(null)
+
+const signUp = () => {
+  const data = {
+    firstName: firstname.value,
+    lastName: lastname.value,
+    email: email.value,
+    username: username.value,
+    password: password.value,
+    confirmPassword: repeatPassword.value,
+  };
+  console.log('>>>data', data)
+  console.log('Login func from Register Component')
+  store.dispatch('register', data)
+}
+
+</script>
+
 <template>
   <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
     <CContainer>
@@ -67,33 +97,3 @@
     </CContainer>
   </div>
 </template>
-
-<script setup>
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { ref } from 'vue'
-const router = useRouter()
-const store = useStore()
-
-const firstname = ref(null)
-const lastname = ref(null)
-const email = ref(null)
-const username = ref(null)
-const password = ref(null)
-const repeatPassword = ref(null)
-
-const signUp = () => {
-  const data = {
-    firstName: firstname.value,
-    lastName: lastname.value,
-    email: email.value,
-    username: username.value,
-    password: password.value,
-    confirmPassword: repeatPassword.value,
-  };
-  console.log('>>>data', data)
-  console.log('Login func from Register Component')
-  store.dispatch('register', data)
-}
-
-</script>
