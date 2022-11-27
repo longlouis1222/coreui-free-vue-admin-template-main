@@ -272,7 +272,7 @@ const routes = [
     },
     children: [
       {
-        path: '404',
+        path: '/:pathMath(.*)*',
         name: 'Page404',
         component: () => import('@/views/pages/Page404'),
       },
@@ -290,6 +290,11 @@ const routes = [
         path: 'register',
         name: 'Register',
         component: () => import('@/views/pages/Register'),
+      },
+      {
+        path: 'activation',
+        name: 'Activation',
+        component: () => import('@/views/pages/ActiveAccount'),
       },
       {
         path: 'forgot-password',

@@ -1,5 +1,16 @@
+<script setup>
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+
+const backToPrev = () => {
+  router.go(-1);
+}
+
+</script>
+
 <template>
-  <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
+  <div class="min-vh-100 d-flex flex-row align-items-center">
     <CContainer>
       <CRow class="justify-content-center">
         <CCol :md="6">
@@ -11,20 +22,11 @@
             </p>
           </div>
           <CInputGroup class="input-prepend">
-            <CInputGroupText>
-              <CIcon icon="cil-magnifying-glass" />
-            </CInputGroupText>
-            <CFormInput type="text" placeholder="What are you looking for?" />
-            <CButton color="info">Search</CButton>
+            <CButton color="primary" variant="outline" @click="backToPrev"><CIcon icon="cil-arrow-left"/> Go back</CButton>
           </CInputGroup>
         </CCol>
       </CRow>
     </CContainer>
+    <img src="../../assets/gifs/404.gif" alt="404" style="padding-right: 110px;">
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Page404',
-}
-</script>

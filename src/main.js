@@ -5,7 +5,9 @@ import store from './store'
 
 import CoreuiVue from '@coreui/vue'
 import CIcon from '@coreui/icons-vue'
-import { iconsSet as icons } from '@/assets/icons'
+// import { iconsSet as icons } from '@/assets/icons'
+import * as icons from '@coreui/icons';
+
 import DocsCallout from '@/components/DocsCallout'
 import DocsExample from '@/components/DocsExample'
 

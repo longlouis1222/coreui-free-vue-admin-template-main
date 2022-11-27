@@ -98,6 +98,19 @@ export default createStore({
         console.log(error)
       }
     },
+
+    async activeAccount(credentials) {
+      try {
+        console.log('activeAccount from Action store...')
+        const res = await AuthService.activeAccount(credentials.code)
+        if (res.status) {
+          console.log('activeAccount RES', res)
+          router.push({ name: 'Login' })
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   },
   modules: {},
   // modules,

@@ -10,8 +10,8 @@ export default {
 
   register(credentials) {
     return Api().post('sign-up', {
-      firstName: credentials.firstName,
-      lastName: credentials.lastName,
+      // firstName: credentials.firstName,
+      // lastName: credentials.lastName,
       email: credentials.email,
       username: credentials.username,
       password: credentials.password,
@@ -33,4 +33,8 @@ export default {
       token: credentials.token,
     })
   },
+
+  activeAccount(credentials) {
+    return Api().get(`activation?code=${credentials.code}`)
+  }
 }
