@@ -10,6 +10,12 @@ export default [
     },
   },
   {
+    component: 'CNavItem',
+    name: 'User List',
+    to: '/admin/user-management/user-list',
+    icon: 'cilPeople',
+  },
+  {
     component: 'CNavTitle',
     name: 'Theme',
   },
