@@ -27,6 +27,12 @@ export default [
           import(/* webpackChunkName: "user-list" */ '@/views/admin/UserManagement/UserList.vue'),
       },
       {
+        path: '/employer/employer-account/employer-account-info',
+        name: 'Tài khoản nhà tuyển dụng',
+        component: () =>
+          import(/* webpackChunkName: "user-list" */ '@/views/Employer/EmployerAccount/EmployerAccountInfo.vue'),
+      },
+      {
         path: '/theme',
         name: 'Theme',
         redirect: '/theme/typography',

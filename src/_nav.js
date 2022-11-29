@@ -16,6 +16,12 @@ export default [
     icon: 'cilPeople',
   },
   {
+    component: 'CNavItem',
+    name: 'Tài khoản nhà tuyển dụng',
+    to: '/employer/employer-account/employer-account-info',
+    icon: 'cilPeople',
+  },
+  {
     component: 'CNavTitle',
     name: 'Theme',
   },
